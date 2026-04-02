@@ -1,179 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HealthArc - Smart Health Monitoring</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthArc – Smart Health Monitoring</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
+    :root {
+      --green-deep: #1a4a2e;
+      --green-mid: #2d6a4f;
+      --green-bright: #40916c;
+      --green-light: #74c69d;
+      --green-pale: #b7e4c7;
+      --cream: #f8f5ee;
+      --cream-dark: #ede8dc;
+      --ink: #1a1a18;
+      --ink-soft: #3a3a35;
+      --ink-muted: #7a7a70;
+      --white: #ffffff;
+    }
 
-body {
-    background: linear-gradient(135deg, #2e7d32, #66bb6a);
-    min-height: 100vh;
-    color: #fff;
-}
+    html { scroll-behavior: smooth; }
 
-/* HEADER */
-header {
-    text-align: center;
-    padding: 60px 20px 30px;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
 
-header h1 {
-    font-size: 42px;
-    font-weight: bold;
-}
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(248,245,238,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(45,106,79,0.12);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.4rem;
+      color: var(--green-deep);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--green-bright); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500; color: var(--ink-soft);
+      text-decoration: none; letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green-mid); }
+    .nav-cta {
+      background: var(--green-deep);
+      color: var(--white) !important;
+      padding: 9px 22px; border-radius: 100px;
+      font-size: 0.875rem !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--green-mid) !important; color: var(--white) !important; }
 
-header p {
-    margin-top: 10px;
-    font-size: 18px;
-    opacity: 0.9;
-}
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 120px 80px 80px;
+      gap: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, rgba(116,198,157,0.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -100px; left: 30%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(45,106,79,0.10) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(64,145,108,0.12);
+      border: 1px solid rgba(64,145,108,0.3);
+      color: var(--green-mid);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge::before { content: '◉'; font-size: 0.6rem; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-/* CONTAINER */
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
-}
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -1.5px; color: var(--ink);
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .hero-title em {
+      font-style: normal; color: var(--green-bright);
+      position: relative;
+    }
+    .hero-title em::after {
+      content: '';
+      position: absolute; bottom: 2px; left: 0; right: 0; height: 3px;
+      background: var(--green-light); border-radius: 2px;
+    }
+    .hero-sub {
+      font-size: 1.1rem; color: var(--ink-soft); line-height: 1.7;
+      max-width: 480px; margin-bottom: 44px;
+      font-weight: 300;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; align-items: center;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--green-deep); color: var(--white);
+      padding: 16px 32px; border-radius: 100px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      text-decoration: none; letter-spacing: 0.2px;
+      transition: all 0.25s; box-shadow: 0 4px 20px rgba(26,74,46,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--green-mid);
+      box-shadow: 0 8px 32px rgba(26,74,46,0.4);
+      transform: translateY(-2px);
+    }
+    .btn-primary svg { width: 18px; height: 18px; }
+    .btn-secondary {
+      font-size: 0.9rem; color: var(--green-mid);
+      text-decoration: none; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+      transition: gap 0.2s;
+    }
+    .btn-secondary:hover { gap: 10px; }
 
-/* GLASS CARD */
-.card {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    padding: 25px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-}
+    /* phone mockup */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative; z-index: 1;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .phone-wrap {
+      position: relative; width: 260px;
+    }
+    .phone-frame {
+      width: 260px; height: 520px;
+      background: var(--green-deep);
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 30px 80px rgba(26,74,46,0.35), 0 4px 12px rgba(26,74,46,0.2);
+      position: relative;
+    }
+    .phone-screen {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, #1a4a2e 0%, #2d6a4f 40%, #40916c 100%);
+      border-radius: 26px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px 20px;
+      overflow: hidden;
+    }
+    .phone-logo-box {
+      font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800;
+      color: var(--white); letter-spacing: -0.5px; margin-bottom: 6px;
+    }
+    .phone-logo-sub { font-size: 0.7rem; color: var(--green-pale); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 28px; }
+    .phone-metrics { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .metric-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 14px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .metric-icon { font-size: 1.2rem; }
+    .metric-info { flex: 1; }
+    .metric-label { font-size: 0.65rem; color: var(--green-pale); text-transform: uppercase; letter-spacing: 0.8px; }
+    .metric-value { font-size: 1.1rem; font-weight: 600; color: var(--white); font-family: 'Syne', sans-serif; }
+    .metric-bar { height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+    .metric-bar-fill { height: 100%; background: var(--green-light); border-radius: 2px; }
 
-h2 {
-    margin-bottom: 10px;
-}
+    .floating-chip {
+      position: absolute;
+      background: var(--white);
+      border-radius: 16px; padding: 10px 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      font-size: 0.78rem; font-weight: 500; color: var(--ink);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .chip-1 { right: -70px; top: 60px; }
+    .chip-2 { left: -70px; bottom: 100px; }
+    .chip-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .chip-dot.green { background: #40916c; }
+    .chip-dot.red { background: #e63946; }
 
-p {
-    line-height: 1.6;
-}
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-ul {
-    padding-left: 20px;
-}
+    /* ── ABOUT STRIP ── */
+    .about-strip {
+      background: var(--green-deep);
+      padding: 80px 80px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .about-tag {
+      font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green-light); font-weight: 500; margin-bottom: 16px;
+    }
+    .about-heading {
+      font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 700;
+      color: var(--white); line-height: 1.15; letter-spacing: -0.5px;
+    }
+    .about-body {
+      font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.8;
+      font-weight: 300;
+    }
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    }
+    .stat-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 28px 24px;
+    }
+    .stat-num {
+      font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800;
+      color: var(--green-light); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.55); line-height: 1.4; }
 
-li {
-    margin-bottom: 8px;
-}
+    /* ── FEATURES ── */
+    .features {
+      padding: 100px 80px;
+      background: var(--cream);
+    }
+    .section-header {
+      text-align: center; margin-bottom: 64px;
+    }
+    .section-tag {
+      font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green-mid); font-weight: 500; margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif; font-size: 2.6rem; font-weight: 800;
+      letter-spacing: -1px; line-height: 1.1;
+    }
+    .section-sub {
+      font-size: 1rem; color: var(--ink-muted); margin-top: 12px; font-weight: 300;
+    }
 
-/* DOWNLOAD SECTION */
-.download {
-    text-align: center;
-}
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--white);
+      border-radius: 24px; padding: 36px 30px;
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--green-bright), var(--green-light));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      background: rgba(64,145,108,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 20px;
+    }
+    .feature-name {
+      font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700;
+      margin-bottom: 10px; letter-spacing: -0.2px;
+    }
+    .feature-desc { font-size: 0.9rem; color: var(--ink-muted); line-height: 1.65; }
 
-.download button {
-    margin-top: 15px;
-    background: rgba(255,255,255,0.2);
-    border: none;
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: 0.3s;
-}
+    /* full-width featured card */
+    .feature-card.wide {
+      grid-column: span 3;
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 28px; align-items: center;
+    }
+    .feature-card.wide .feature-icon { width: 64px; height: 64px; font-size: 1.8rem; flex-shrink: 0; margin-bottom: 0; }
 
-.download button:hover {
-    background: rgba(255,255,255,0.35);
-    transform: scale(1.05);
-}
+    /* ── DEVELOPERS ── */
+    .developers {
+      background: var(--cream-dark);
+      padding: 100px 80px;
+    }
+    .dev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 0; }
+    .dev-card {
+      background: var(--white); border-radius: 24px; padding: 36px;
+      border: 1px solid rgba(0,0,0,0.06);
+      display: flex; flex-direction: column; gap: 4px;
+      transition: box-shadow 0.3s;
+    }
+    .dev-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+    .dev-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700;
+      color: var(--white); margin-bottom: 16px;
+    }
+    .dev-name {
+      font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+    .dev-degree { font-size: 0.85rem; color: var(--green-mid); font-weight: 500; margin-bottom: 4px; }
+    .dev-detail { font-size: 0.82rem; color: var(--ink-muted); }
+    .dev-email { color: var(--green-mid); text-decoration: none; font-size: 0.82rem; }
+    .dev-email:hover { text-decoration: underline; }
+    .dev-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 14px 0; }
+    .dev-about { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.65; font-weight: 300; }
 
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 20px;
-    margin-top: 20px;
-}
+    /* ── FUTURE PLANS ── */
+    .future {
+      background: var(--white);
+      padding: 80px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .future-cards {
+      display: flex; gap: 24px; margin-top: 48px;
+    }
+    .future-card {
+      background: rgba(64,145,108,0.06);
+      border: 1px solid rgba(64,145,108,0.2);
+      border-radius: 20px; padding: 28px 32px;
+      max-width: 340px; text-align: left;
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .future-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green-bright); flex-shrink: 0; margin-top: 5px;
+    }
+    .future-text { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.6; }
 
-footer a {
-    color: white;
-    text-decoration: underline;
-    font-weight: bold;
-}
+    /* ── DOWNLOAD CTA ── */
+    .download-cta {
+      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+      padding: 100px 80px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .download-cta::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      border: 100px solid rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .download-cta::after {
+      content: '';
+      position: absolute; bottom: -60px; left: -60px;
+      width: 300px; height: 300px;
+      border: 60px solid rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .cta-label {
+      font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green-pale); margin-bottom: 16px;
+    }
+    .cta-title {
+      font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800;
+      color: var(--white); letter-spacing: -1px; line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .cta-sub { font-size: 1.05rem; color: rgba(255,255,255,0.65); margin-bottom: 44px; font-weight: 300; }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--white); color: var(--green-deep);
+      padding: 18px 40px; border-radius: 100px;
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+      text-decoration: none; letter-spacing: -0.2px;
+      transition: all 0.25s; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .btn-download:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
+    .btn-download svg { width: 20px; height: 20px; }
 
-</style>
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 40px 80px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--green-light); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a {
+      font-size: 0.85rem; color: rgba(255,255,255,0.5);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--green-light); }
+    .footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
 
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding: 100px 32px 60px; }
+      .hero-visual { display: none; }
+      .about-strip, .features, .developers, .download-cta, footer { padding: 60px 32px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card.wide { grid-column: span 1; grid-template-columns: 1fr; }
+      .dev-grid { grid-template-columns: 1fr; }
+      .future-cards { flex-direction: column; }
+      .about-strip { grid-template-columns: 1fr; gap: 40px; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-    <h1>HealthArc</h1>
-    <p>Smart Health Monitoring</p>
-</header>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Health<span>Arc</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="privacy.html" class="nav-cta">Privacy Policy</a></li>
+  </ul>
+</nav>
 
-<div class="container">
-
-    <div class="card">
-        <h2>About HealthArc</h2>
-        <p>
-            HealthArc is a smart health monitoring application designed to help users track and manage
-            important health insights in one place. It combines health tracking with intelligent
-            assistance to provide a simple and effective wellness experience.
-        </p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Smart Health Monitoring</div>
+    <h1 class="hero-title">Your health,<br><em>intelligently</em><br>tracked.</h1>
+    <p class="hero-sub">HealthArc combines health tracking with intelligent assistance to provide a simple and effective wellness experience — all in one place.</p>
+    <div class="hero-actions">
+      <a href="#download" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download App
+      </a>
+      <a href="#features" class="btn-secondary">Explore features →</a>
     </div>
-
-    <div class="card">
-        <h2>Key Features</h2>
-        <ul>
-            <li>OTP Authentication – Secure login</li>
-            <li>Profile Management – Manage personal health data</li>
-            <li>Step Counter – Track daily activity</li>
-            <li>Sleep Monitor – Analyze sleep patterns</li>
-            <li>Heart Rate Monitor – Monitor cardiovascular health</li>
-            <li>Blood Pressure Monitor</li>
-            <li>SpO₂ Monitor</li>
-            <li>AI Assistant – Smart guidance</li>
-        </ul>
+  </div>
+  <div class="hero-visual">
+    <div class="phone-wrap">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-logo-box">HealthArc</div>
+          <div class="phone-logo-sub">Smart Health Monitor</div>
+          <div class="phone-metrics">
+            <div class="metric-card">
+              <div class="metric-icon">❤️</div>
+              <div class="metric-info">
+                <div class="metric-label">Heart Rate</div>
+                <div class="metric-value">72 BPM</div>
+                <div class="metric-bar"><div class="metric-bar-fill" style="width:60%"></div></div>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">🦶</div>
+              <div class="metric-info">
+                <div class="metric-label">Steps Today</div>
+                <div class="metric-value">8,432</div>
+                <div class="metric-bar"><div class="metric-bar-fill" style="width:84%"></div></div>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">🫁</div>
+              <div class="metric-info">
+                <div class="metric-label">Blood Oxygen</div>
+                <div class="metric-value">98 SpO₂</div>
+                <div class="metric-bar"><div class="metric-bar-fill" style="width:98%"></div></div>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">😴</div>
+              <div class="metric-info">
+                <div class="metric-label">Sleep Last Night</div>
+                <div class="metric-value">7h 12m</div>
+                <div class="metric-bar"><div class="metric-bar-fill" style="width:72%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="floating-chip chip-1"><div class="chip-dot green"></div> All vitals normal</div>
+      <div class="floating-chip chip-2"><div class="chip-dot red"></div> BP 120/80 mmHg</div>
     </div>
+  </div>
+</section>
 
-    <div class="card">
-        <h2>Developers</h2>
-        <p><strong>Abhishek Saket</strong><br>Email: abhisheksaket@gmail.com</p>
-        <br>
-        <p><strong>Ankush Mishra</strong><br>Email: ankushmishra@gmail.com</p>
-        <br>
-        <p>
-            Passionate Android developers focused on building smart and useful health applications.
-        </p>
+<!-- ABOUT -->
+<section class="about-strip" id="about">
+  <div>
+    <div class="about-tag">About HealthArc</div>
+    <h2 class="about-heading" style="margin-bottom:20px;">Built to simplify your wellness journey</h2>
+    <p class="about-body">HealthArc is a smart health monitoring application designed to help users track and manage important health insights in one place. The application combines health tracking with intelligent assistance to provide a simple and effective wellness experience. Developed as a learning project by passionate Computer Science students, HealthArc's goal is to create simple and useful mobile applications that improve everyday life.</p>
+  </div>
+  <div class="about-stats">
+    <div class="stat-box">
+      <div class="stat-num">7+</div>
+      <div class="stat-label">Health monitoring features</div>
     </div>
-
-    <div class="card">
-        <h2>Future Plans</h2>
-        <ul>
-            <li>Goal & history tracking</li>
-            <li>Smart health alerts</li>
-        </ul>
+    <div class="stat-box">
+      <div class="stat-num">AI</div>
+      <div class="stat-label">Powered smart assistant</div>
     </div>
-
-    <div class="card download">
-        <h2>Download Now</h2>
-        <p>Start your smart health journey today</p>
-        <button onclick="window.location.href='YOUR_APP_LINK_HERE'">
-            Download App
-        </button>
+    <div class="stat-box">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Continuous tracking</div>
     </div>
+    <div class="stat-box">
+      <div class="stat-num">OTP</div>
+      <div class="stat-label">Secure authentication</div>
+    </div>
+  </div>
+</section>
 
-</div>
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-header">
+    <div class="section-tag">Key Features</div>
+    <h2 class="section-title">Everything you need to<br>monitor your health</h2>
+    <p class="section-sub">Comprehensive tools built into one seamless experience.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-name">OTP Authentication</div>
+      <p class="feature-desc">Secure login using one-time password verification to protect user accounts and personal health data.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👤</div>
+      <div class="feature-name">Profile Page</div>
+      <p class="feature-desc">Allows users to manage their personal health profile and information conveniently.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🦶</div>
+      <div class="feature-name">Step Counter</div>
+      <p class="feature-desc">Tracks daily steps using the device sensors to encourage physical activity and healthy habits.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">😴</div>
+      <div class="feature-name">Sleep Monitor</div>
+      <p class="feature-desc">Monitors sleep duration and sleeping patterns for better rest and recovery insight.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">❤️</div>
+      <div class="feature-name">Heart Rate Monitor</div>
+      <p class="feature-desc">Tracks heart rate to help users stay aware of their cardiovascular health and fitness levels.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🩸</div>
+      <div class="feature-name">Blood Pressure Monitor</div>
+      <p class="feature-desc">Helps users monitor and record blood pressure readings for long-term cardiovascular awareness.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🫁</div>
+      <div class="feature-name">Blood Oxygen (SpO₂)</div>
+      <p class="feature-desc">Tracks oxygen saturation levels for respiratory health monitoring and early detection of anomalies.</p>
+    </div>
+    <div class="feature-card wide">
+      <div class="feature-icon">🤖</div>
+      <div>
+        <div class="feature-name">AI Assistant</div>
+        <p class="feature-desc">Provides smart assistance inside the app to answer health questions, guide users through their data, and offer personalized wellness recommendations based on your tracked metrics.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- DEVELOPERS -->
+<section class="developers" id="team">
+  <div class="section-header">
+    <div class="section-tag">Meet the Team</div>
+    <h2 class="section-title">Built by passionate developers</h2>
+    <p class="section-sub">Computer Science students from Vindhya Institute of Technology and Science, Satna.</p>
+  </div>
+  <div class="dev-grid">
+    <div class="dev-card">
+      <div class="dev-avatar">AS</div>
+      <div class="dev-name">Abhishek Saket</div>
+      <div class="dev-degree">B.Tech in Computer Science</div>
+      <div class="dev-detail">Vindhya Institute of Technology and Science, Satna</div>
+      <a href="mailto:abhisheksaket@gmail.com" class="dev-email">abhisheksaket@gmail.com</a>
+      <div class="dev-divider"></div>
+      <p class="dev-about">Computer Science Student and Android Developer in Java. Passionate about building smart health applications that make a difference in everyday wellness.</p>
+    </div>
+    <div class="dev-card">
+      <div class="dev-avatar">AM</div>
+      <div class="dev-name">Ankush Mishra</div>
+      <div class="dev-degree">B.Tech in Computer Science</div>
+      <div class="dev-detail">Vindhya Institute of Technology and Science, Satna</div>
+      <a href="mailto:ankushmishra@gmail.com" class="dev-email">ankushmishra@gmail.com</a>
+      <div class="dev-divider"></div>
+      <p class="dev-about">Computer Science Student and Android Developer passionate about building smart health applications that help users track their health activities such as sleep and daily wellness.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE PLANS -->
+<section class="future">
+  <div class="section-tag">What's Coming</div>
+  <h2 class="section-title">Future Plans</h2>
+  <p class="section-sub" style="max-width:500px;margin:0 auto">We're continuously improving HealthArc with new features to make health tracking even more powerful.</p>
+  <div class="future-cards">
+    <div class="future-card">
+      <div class="future-dot"></div>
+      <div class="future-text"><strong>Goal & History Section in Steps Monitoring</strong> — Track progress toward daily step goals and view historical step data over time.</div>
+    </div>
+    <div class="future-card">
+      <div class="future-dot"></div>
+      <div class="future-text"><strong>Alerts for Unusual Health Fluctuations</strong> — Get notified when your health insights show unusual patterns that may need attention.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD CTA -->
+<section class="download-cta" id="download">
+  <div class="cta-label">Get Started Today</div>
+  <h2 class="cta-title">Take control of your<br>health today.</h2>
+  <p class="cta-sub">Download HealthArc and start your smart wellness journey — free.</p>
+  <a href="#" class="btn-download">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    Download for Android
+  </a>
+</section>
+
+<!-- FOOTER -->
 <footer>
+  <div class="footer-logo">Health<span>Arc</span></div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#features">Features</a>
+    <a href="#team">Team</a>
     <a href="privacy.html">Privacy Policy</a>
+  </div>
+  <div class="footer-copy">© 2026 HealthArc. All rights reserved.</div>
 </footer>
 
 </body>
